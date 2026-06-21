@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elite Barber — Barbearia Premium</title>
+    <meta name="description"
+        content="Cortes modernos, barba impecável e atendimento de excelência. Agende seu horário na Elite Barber.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+
+<body>
+
+    <div class="cursor-dot" aria-hidden="true"></div>
+    <div class="scroll-progress" aria-hidden="true"></div>
+
+    <!-- HEADER -->
+    <header class="header" id="header">
+        <nav class="nav container">
+            <a href="#home" class="logo">ELITE<span>BARBER</span></a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Início</a></li>
+                <li><a href="#sobre">Sobre nós</a></li>
+                <li><a href="#servicos">Serviços</a></li>
+                <li><a href="#galeria">Galeria</a></li>
+                <li><a href="#localizacao">Localização</a></li>
+                <li><a href="#contato">Contato</a></li>
+            </ul>
+            <a href="#agendamento" class="btn btn-gold btn-sm nav-cta">Agendar Horário</a>
+            <button class="burger" id="burger" aria-label="Abrir menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero" id="home">
+        <div class="hero-bg">
+            <img src="assets/img/hero-bg.svg" alt="" class="hero-img">
+            <canvas id="particles"></canvas>
+            <div class="hero-overlay"></div>
+        </div>
+        <div class="hero-content container">
+            <p class="hero-tag" data-aos="fade-down">BARBEARIA PREMIUM</p>
+            <h1 class="hero-title" data-aos="fade-up" data-aos-delay="100">Seu estilo <span class="gold">começa
+                    aqui.</span></h1>
+            <p class="hero-sub" data-aos="fade-up" data-aos-delay="200">Cortes modernos, barba impecável e atendimento
+                de excelência.</p>
+            <div class="hero-actions" data-aos="fade-up" data-aos-delay="300">
+                <a href="#agendamento" class="btn btn-gold btn-lg">Agendar Horário</a>
+                <a href="#servicos" class="btn btn-outline btn-lg">Conheça nossos serviços</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- SOBRE -->
+    <section class="about" id="sobre">
+        <div class="container">
+            <span class="eyebrow" data-aos="fade-up">QUEM SOMOS</span>
+            <h2 class="section-title" data-aos="fade-up">Tradição e modernidade em cada detalhe</h2>
+            <p class="section-text" data-aos="fade-up" data-aos-delay="100">
+                Na Elite Barber unimos técnica apurada, ambiente sofisticado e produtos premium para entregar
+                muito mais que um corte: uma experiência. Cada atendimento é pensado para realçar seu estilo
+                pessoal com precisão e cuidado.
+            </p>
+
+            <div class="grid-4 about-cards">
+                <div class="card" data-aos="fade-up" data-aos-delay="0">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z" />
+                        </svg>
+                    </div>
+                    <h3>Profissionais qualificados</h3>
+                    <p>Equipe especializada em constante atualização técnica.</p>
+                </div>
+                <div class="card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M20 21a8 8 0 10-16 0" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                    </div>
+                    <h3>Atendimento personalizado</h3>
+                    <p>Cada cliente recebe um diagnóstico de estilo exclusivo.</p>
+                </div>
+                <div class="card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M3 9l9-6 9 6v11a1 1 0 01-1 1H4a1 1 0 01-1-1V9z" />
+                        </svg>
+                    </div>
+                    <h3>Ambiente confortável</h3>
+                    <p>Espaço climatizado, música e drinks de cortesia.</p>
+                </div>
+                <div class="card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="card-icon">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M12 2a7 7 0 017 7c0 5-7 13-7 13S5 14 5 9a7 7 0 017-7z" />
+                            <circle cx="12" cy="9" r="2.5" />
+                        </svg>
+                    </div>
+                    <h3>Produtos premium</h3>
+                    <p>Linhas profissionais importadas selecionadas a dedo.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SERVIÇOS -->
+    <section class="services" id="servicos">
+        <div class="container">
+            <span class="eyebrow" data-aos="fade-up">O QUE OFERECEMOS</span>
+            <h2 class="section-title" data-aos="fade-up">Nossos serviços</h2>
+
+            <div class="grid-3 services-grid">
+                <div class="service-card" data-aos="fade-up" data-aos-delay="0">
+                    <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M6 9l6 6 6-6" />
+                            <path d="M6 4l12 0" />
+                        </svg></div>
+                    <h3>Corte Masculino</h3>
+                    <p>Cortes clássicos e modernos sob medida para seu rosto.</p>
+                    <span class="price">R$ 60</span>
+                </div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M19 9c0 5-3.5 9-7 12-3.5-3-7-7-7-12a7 7 0 0114 0z" />
+                        </svg></div>
+                    <h3>Barba</h3>
+                    <p>Modelagem completa com toalha quente e navalha.</p>
+                    <span class="price">R$ 45</span>
+                </div>
+                <div class="service-card featured" data-aos="fade-up" data-aos-delay="200">
+                    <span class="badge">Mais pedido</span>
+                    <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z" />
+                        </svg></div>
+                    <h3>Corte + Barba</h3>
+                    <p>Combo completo para um visual impecável.</p>
+                    <span class="price">R$ 95</span>
+                </div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="0">
+                    <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M3 12h18M3 6h18M3 18h10" />
+                        </svg></div>
+                    <h3>Sobrancelha</h3>
+                    <p>Design preciso com navalha ou pinça.</p>
+                    <span class="price">R$ 25</span>
+                </div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <circle cx="12" cy="12" r="9" />
+                            <path d="M9 12l2 2 4-4" />
+                        </svg></div>
+                    <h3>Pigmentação</h3>
+                    <p>Preenchimento de falhas em barba e cabelo.</p>
+                    <span class="price">R$ 70</span>
+                </div>
+                <div class="service-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M4 12l4 4L20 4" />
+                        </svg></div>
+                    <h3>Acabamento</h3>
+                    <p>Finalização de contorno, nuca e acabamento navalhado.</p>
+                    <span class="price">R$ 20</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GALERIA -->
+    <section class="gallery" id="galeria">
+        <div class="container">
+            <span class="eyebrow" data-aos="fade-up">PORTFÓLIO</span>
+            <h2 class="section-title" data-aos="fade-up">Galeria</h2>
+
+            <div class="masonry" id="masonry">
+                <div class="g-item" data-aos="zoom-in"><img src="../static/img/degrade.jpg" alt="Corte degradê moderno"
+                        loading="lazy"></div>
+                <div class="g-item" data-aos="zoom-in" data-aos-delay="50"><img src="../static/img/navalha.jpg"
+                        alt="Barba modelada navalhada" loading="lazy"></div>
+                <div class="g-item" data-aos="zoom-in" data-aos-delay="100"><img src="../static/img/barbearia.jpg"
+                        alt="Ambiente da barbearia" loading="lazy"></div>
+                <div class="g-item" data-aos="zoom-in" data-aos-delay="150"><img src="../static/img/risco.jpg"
+                        alt="Corte com risco lateral" loading="lazy"></div>
+                <div class="g-item" data-aos="zoom-in" data-aos-delay="200"><img src="../static/img/pigmentação.jpg"
+                        alt="Pigmentação de barba" loading="lazy"></div>
+                <div class="g-item" data-aos="zoom-in" data-aos-delay="250"><img src="../static/img/finalização.jpg"
+                        alt="Finalização de corte" loading="lazy"></div>
+            </div>
+        </div>
+
+        <div class="lightbox" id="lightbox">
+            <button class="lightbox-close" id="lightboxClose" aria-label="Fechar">&times;</button>
+            <img src="" alt="" id="lightboxImg">
+        </div>
+    </section>
+
+    <!-- AGENDAMENTO -->
+    <section class="booking" id="agendamento">
+        <div class="container booking-content" data-aos="zoom-in">
+            <h2>Agende seu horário</h2>
+            <p>Garanta seu espaço com os melhores barbeiros da cidade.</p>
+            <a href="https://wa.me/5511999999999" target="_blank" rel="noopener" class="btn btn-gold btn-xl pulse">
+                <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22">
+                    <path
+                        d="M20.5 3.5A11 11 0 003.6 17L2 22l5.2-1.6A11 11 0 1020.5 3.5zM12 20a8 8 0 01-4.1-1.1l-.3-.2-3 .9.9-2.9-.2-.3A8 8 0 1112 20zm4.4-5.9c-.2-.1-1.4-.7-1.6-.8s-.4-.1-.5.1-.6.8-.7.9-.3.2-.5.1a6.6 6.6 0 01-2-1.2 7.3 7.3 0 01-1.4-1.7c-.1-.2 0-.4.1-.5l.4-.4.2-.4v-.4c-.1-.1-.5-1.2-.7-1.7s-.4-.4-.5-.4h-.5a.9.9 0 00-.6.3 2.7 2.7 0 00-.8 2 4.6 4.6 0 00.9 2.4 10.6 10.6 0 004.1 3.6c.6.2 1 .4 1.4.5a3.3 3.3 0 001.5.1 2.5 2.5 0 001.6-1.1 2 2 0 00.1-1.1c0-.1-.2-.2-.4-.3z" />
+                </svg>
+                Agendar pelo WhatsApp
+            </a>
+        </div>
+    </section>
+
+    <!-- LOCALIZAÇÃO -->
+    <section class="location" id="localizacao">
+        <div class="container">
+            <span class="eyebrow" data-aos="fade-up">VENHA NOS VISITAR</span>
+            <h2 class="section-title" data-aos="fade-up">Estamos localizados aqui</h2>
+
+            <div class="location-grid">
+                <div class="location-info" data-aos="fade-right">
+                    <ul>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M12 21s7-7.2 7-12a7 7 0 10-14 0c0 4.8 7 12 7 12z" />
+                                <circle cx="12" cy="9" r="2.5" />
+                            </svg>
+                            <div>
+                                <strong>Endereço</strong>
+                                <p>Rua Augusta, 1200 — Consolação<br>São Paulo / SP — CEP 01305-100</p>
+                            </div>
+                        </li>
+                        <li>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <circle cx="12" cy="12" r="9" />
+                                <path d="M12 7v5l3 3" />
+                            </svg>
+                            <div>
+                                <strong>Horário de funcionamento</strong>
+                                <p>Seg – Sáb: 09h às 20h<br>Domingo: Fechado</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="location-map" data-aos="fade-left">
+                    <iframe src="https://www.google.com/maps?q=Rua+Augusta,+1200,+São+Paulo&output=embed" width="100%"
+                        height="100%" style="border:0;" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade" title="Mapa de localização"></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer" id="contato">
+        <div class="container footer-grid">
+            <div>
+                <a href="#home" class="logo">ELITE<span>BARBER</span></a>
+                <p>Seu estilo começa aqui.</p>
+                <div class="socials">
+                    <a href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <rect x="3" y="3" width="18" height="18" rx="5" />
+                            <circle cx="12" cy="12" r="4" />
+                            <circle cx="17.5" cy="6.5" r="1" />
+                        </svg></a>
+                    <a href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M14 9h3V6h-3a4 4 0 00-4 4v2H7v3h3v6h3v-6h3l1-3h-4v-2a1 1 0 011-1z" />
+                        </svg></a>
+                    <a href="#" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.5">
+                            <path d="M14 3v11a3.5 3.5 0 11-3-3.46" />
+                            <path d="M14 3a5 5 0 005 5" />
+                        </svg></a>
+                </div>
+            </div>
+            <div class="footer-contact">
+                <strong>Contato</strong>
+                <p>(11) 9 9999-9999</p>
+                <p>contato@elitebarber.com</p>
+                <a href="https://wa.me/5511999999999" target="_blank" rel="noopener">WhatsApp</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Elite Barber. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="../static/js/script.js"></script>
+</body>
+
+</html>
