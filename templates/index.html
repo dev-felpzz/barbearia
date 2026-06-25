@@ -9,7 +9,8 @@
         content="Cortes modernos, barba impecável e atendimento de excelência. Agende seu horário na Elite Barber.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap"
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500;1,600&family=Inter:wght@400;500;600;700&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
     <link rel="stylesheet" href="../static/css/style.css">
@@ -42,7 +43,7 @@
     <!-- HERO -->
     <section class="hero" id="home">
         <div class="hero-bg">
-            <img src="assets/img/hero-bg.svg" alt="" class="hero-img">
+            <img src="../static/img/paralaxx.jpg" alt="" class="hero-img">
             <canvas id="particles"></canvas>
             <div class="hero-overlay"></div>
         </div>
@@ -53,7 +54,7 @@
             <p class="hero-sub" data-aos="fade-up" data-aos-delay="200">Cortes modernos, barba impecável e atendimento
                 de excelência.</p>
             <div class="hero-actions" data-aos="fade-up" data-aos-delay="300">
-                <a href="#agendamento" class="btn btn-gold btn-lg">Agendar Horário</a>
+                <a href="../templates/agendamento.html" class="btn btn-gold btn-lg">Agendar Horário</a>
                 <a href="#servicos" class="btn btn-outline btn-lg">Conheça nossos serviços</a>
             </div>
         </div>
@@ -72,40 +73,22 @@
 
             <div class="grid-4 about-cards">
                 <div class="card" data-aos="fade-up" data-aos-delay="0">
-                    <div class="card-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z" />
-                        </svg>
-                    </div>
+                    <span class="card-num">01</span>
                     <h3>Profissionais qualificados</h3>
                     <p>Equipe especializada em constante atualização técnica.</p>
                 </div>
                 <div class="card" data-aos="fade-up" data-aos-delay="100">
-                    <div class="card-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M20 21a8 8 0 10-16 0" />
-                            <circle cx="12" cy="7" r="4" />
-                        </svg>
-                    </div>
+                    <span class="card-num">02</span>
                     <h3>Atendimento personalizado</h3>
                     <p>Cada cliente recebe um diagnóstico de estilo exclusivo.</p>
                 </div>
                 <div class="card" data-aos="fade-up" data-aos-delay="200">
-                    <div class="card-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M3 9l9-6 9 6v11a1 1 0 01-1 1H4a1 1 0 01-1-1V9z" />
-                        </svg>
-                    </div>
+                    <span class="card-num">03</span>
                     <h3>Ambiente confortável</h3>
                     <p>Espaço climatizado, música e drinks de cortesia.</p>
                 </div>
                 <div class="card" data-aos="fade-up" data-aos-delay="300">
-                    <div class="card-icon">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                            <path d="M12 2a7 7 0 017 7c0 5-7 13-7 13S5 14 5 9a7 7 0 017-7z" />
-                            <circle cx="12" cy="9" r="2.5" />
-                        </svg>
-                    </div>
+                    <span class="card-num">04</span>
                     <h3>Produtos premium</h3>
                     <p>Linhas profissionais importadas selecionadas a dedo.</p>
                 </div>
@@ -121,58 +104,32 @@
 
             <div class="grid-3 services-grid">
                 <div class="service-card" data-aos="fade-up" data-aos-delay="0">
-                    <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="1.5">
-                            <path d="M6 9l6 6 6-6" />
-                            <path d="M6 4l12 0" />
-                        </svg></div>
                     <h3>Corte Masculino</h3>
                     <p>Cortes clássicos e modernos sob medida para seu rosto.</p>
                     <span class="price">R$ 60</span>
                 </div>
                 <div class="service-card" data-aos="fade-up" data-aos-delay="100">
-                    <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="1.5">
-                            <path d="M19 9c0 5-3.5 9-7 12-3.5-3-7-7-7-12a7 7 0 0114 0z" />
-                        </svg></div>
                     <h3>Barba</h3>
                     <p>Modelagem completa com toalha quente e navalha.</p>
                     <span class="price">R$ 45</span>
                 </div>
                 <div class="service-card featured" data-aos="fade-up" data-aos-delay="200">
                     <span class="badge">Mais pedido</span>
-                    <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="1.5">
-                            <path d="M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1z" />
-                        </svg></div>
                     <h3>Corte + Barba</h3>
                     <p>Combo completo para um visual impecável.</p>
                     <span class="price">R$ 95</span>
                 </div>
                 <div class="service-card" data-aos="fade-up" data-aos-delay="0">
-                    <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="1.5">
-                            <path d="M3 12h18M3 6h18M3 18h10" />
-                        </svg></div>
                     <h3>Sobrancelha</h3>
                     <p>Design preciso com navalha ou pinça.</p>
                     <span class="price">R$ 25</span>
                 </div>
                 <div class="service-card" data-aos="fade-up" data-aos-delay="100">
-                    <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="1.5">
-                            <circle cx="12" cy="12" r="9" />
-                            <path d="M9 12l2 2 4-4" />
-                        </svg></div>
                     <h3>Pigmentação</h3>
                     <p>Preenchimento de falhas em barba e cabelo.</p>
                     <span class="price">R$ 70</span>
                 </div>
                 <div class="service-card" data-aos="fade-up" data-aos-delay="200">
-                    <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="1.5">
-                            <path d="M4 12l4 4L20 4" />
-                        </svg></div>
                     <h3>Acabamento</h3>
                     <p>Finalização de contorno, nuca e acabamento navalhado.</p>
                     <span class="price">R$ 20</span>
@@ -300,6 +257,16 @@
         </div>
     </footer>
 
+    <a href="https://wa.me/5511999999999" target="_blank" rel="noopener" class="whatsapp-float"
+        aria-label="Falar no WhatsApp">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28">
+            <path
+                d="M20.5 3.5A11 11 0 003.6 17L2 22l5.2-1.6A11 11 0 1020.5 3.5zM12 20a8 8 0 01-4.1-1.1l-.3-.2-3 .9.9-2.9-.2-.3A8 8 0 1112 20z" />
+        </svg>
+    </a>
+
+    <!-- Lenis: scroll suave profissional -->
+    <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="../static/js/script.js"></script>
 </body>

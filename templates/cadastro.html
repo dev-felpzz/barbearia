@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Criar conta — Elite Barber</title>
+    <meta name="description" content="Crie sua conta na Elite Barber e agende seus serviços com facilidade." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500;1,600&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <style>
+        :root {
+            --black: #0d0d0d;
+            --dark: #1e1e1e;
+            --dark-2: #161616;
+            --dark-3: #252525;
+            --white: #ffffff;
+            --gold: #c9a227;
+            --gold-light: #e0bc4a;
+            --text-muted: #a8a8a8;
+            --radius: 16px;
+            --ff-display: "Fraunces", serif;
+            --ff-body: "Inter", sans-serif;
+            --ease: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-padding-top: 80px;
+        }
+
+        body {
+            font-family: var(--ff-body);
+            background: var(--black);
+            color: var(--white);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: grid;
+            /* cadastro: formulário à esquerda, visual à direita */
+            grid-template-columns: 1fr 1fr;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ::selection {
+            background: var(--gold);
+            color: var(--black);
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--black);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--gold);
+            border-radius: 4px;
+        }
+
+        /* ===== FORMULÁRIO (esquerda) ===== */
+        .form-side {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 3rem 2rem;
+            background: var(--black);
+        }
+
+        .form-box {
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .logo {
+            font-family: var(--ff-display);
+            font-weight: 600;
+            font-size: 1.4rem;
+            letter-spacing: 0.01em;
+            color: var(--white);
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+
+        .logo span {
+            color: var(--gold);
+            font-style: italic;
+        }
+
+        .form-header {
+            margin-bottom: 2rem;
+        }
+
+        .form-tag {
+            display: block;
+            font-size: 0.72rem;
+            letter-spacing: 0.28em;
+            color: var(--gold);
+            font-weight: 600;
+            margin-bottom: 0.6rem;
+        }
+
+        .form-title {
+            font-family: var(--ff-display);
+            font-weight: 600;
+            font-size: clamp(1.7rem, 3vw, 2.3rem);
+            letter-spacing: 0.005em;
+        }
+
+        .form-subtitle {
+            color: var(--text-muted);
+            font-size: 0.88rem;
+            margin-top: 0.45rem;
+        }
+
+        .form-subtitle a {
+            color: var(--gold);
+            font-weight: 600;
+            transition: color 0.2s;
+        }
+
+        .form-subtitle a:hover {
+            color: var(--gold-light);
+        }
+
+        /* ===== CAMPOS ===== */
+        .field {
+            margin-bottom: 1rem;
+        }
+
+        .field label {
+            display: block;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.04em;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 0.4rem;
+        }
+
+        .input-wrap {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .input-wrap .ico {
+            position: absolute;
+            left: 1rem;
+            width: 17px;
+            height: 17px;
+            color: var(--text-muted);
+            pointer-events: none;
+            transition: color 0.25s;
+            z-index: 1;
+        }
+
+        .input-wrap input {
+            width: 100%;
+            padding: 0.88rem 1rem 0.88rem 2.75rem;
+            background: var(--dark-3);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            color: var(--white);
+            font-family: var(--ff-body);
+            font-size: 0.91rem;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .input-wrap input::placeholder {
+            color: rgba(168, 168, 168, 0.45);
+        }
+
+        .input-wrap input:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.12);
+        }
+
+        .input-wrap:focus-within .ico {
+            color: var(--gold);
+        }
+
+        /* toggle senha */
+        .eye-btn {
+            position: absolute;
+            right: 1rem;
+            background: none;
+            border: 0;
+            cursor: pointer;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            transition: color 0.2s;
+        }
+
+        .eye-btn:hover {
+            color: var(--gold);
+        }
+
+        .eye-btn svg {
+            width: 17px;
+            height: 17px;
+        }
+
+        /* força da senha */
+        .strength-bar {
+            display: flex;
+            gap: 4px;
+            margin-top: 0.5rem;
+        }
+
+        .strength-bar span {
+            flex: 1;
+            height: 3px;
+            border-radius: 2px;
+            background: rgba(255, 255, 255, 0.08);
+            transition: background 0.35s;
+        }
+
+        .strength-label {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+            min-height: 1em;
+            transition: color 0.3s;
+        }
+
+        /* checkbox termos */
+        .checkbox-field {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.7rem;
+            margin: 1.1rem 0;
+        }
+
+        .checkbox-field input[type="checkbox"] {
+            width: 17px;
+            height: 17px;
+            accent-color: var(--gold);
+            flex-shrink: 0;
+            margin-top: 2px;
+            cursor: pointer;
+        }
+
+        .checkbox-field label {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            text-transform: none;
+            letter-spacing: 0;
+        }
+
+        .checkbox-field label a {
+            color: var(--gold);
+            font-weight: 600;
+        }
+
+        .checkbox-field label a:hover {
+            color: var(--gold-light);
+        }
+
+        /* ===== MENSAGEM ===== */
+        .msg {
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 0.84rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+            display: none;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .msg.error {
+            background: rgba(239, 68, 68, 0.12);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #f87171;
+            display: flex;
+        }
+
+        .msg.success {
+            background: rgba(201, 162, 39, 0.12);
+            border: 1px solid rgba(201, 162, 39, 0.3);
+            color: var(--gold-light);
+            display: flex;
+        }
+
+        /* ===== BOTÃO PRINCIPAL ===== */
+        .btn-submit {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--gold-light), var(--gold));
+            color: var(--black);
+            font-family: var(--ff-body);
+            font-weight: 700;
+            font-size: 0.96rem;
+            letter-spacing: 0.03em;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: transform 0.3s var(--ease), box-shadow 0.3s var(--ease);
+        }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px -8px rgba(201, 162, 39, 0.6);
+        }
+
+        .btn-submit:active {
+            transform: scale(0.97);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .spinner {
+            width: 17px;
+            height: 17px;
+            border: 2px solid rgba(0, 0, 0, 0.25);
+            border-top-color: var(--black);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            display: none;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ===== DIVISOR ===== */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            margin: 1.5rem 0;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .divider span {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            letter-spacing: 0.05em;
+        }
+
+        /* ===== BOTÕES SOCIAIS ===== */
+        .social-btns {
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+        }
+
+        .btn-social {
+            width: 100%;
+            padding: 0.8rem 1.2rem;
+            background: var(--dark-3);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 50px;
+            color: var(--white);
+            font-family: var(--ff-body);
+            font-weight: 600;
+            font-size: 0.87rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            transition: background 0.25s, border-color 0.25s, transform 0.25s var(--ease);
+        }
+
+        .btn-social:hover {
+            background: var(--dark);
+            border-color: rgba(255, 255, 255, 0.18);
+            transform: translateY(-2px);
+        }
+
+        .btn-social:active {
+            transform: scale(0.97);
+        }
+
+        .btn-google svg .g-red {
+            fill: #EA4335;
+        }
+
+        .btn-google svg .g-blue {
+            fill: #4285F4;
+        }
+
+        .btn-google svg .g-yellow {
+            fill: #FBBC05;
+        }
+
+        .btn-google svg .g-green {
+            fill: #34A853;
+        }
+
+        /* ===== LADO VISUAL (direita) ===== */
+        .visual {
+            position: relative;
+            overflow: hidden;
+            background: var(--dark-2);
+        }
+
+        .visual-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.4;
+            transform: scale(1.04);
+            transition: transform 12s ease;
+        }
+
+        .visual:hover .visual-img {
+            transform: scale(1.0);
+        }
+
+        .visual-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(225deg,
+                    rgba(13, 13, 13, 0.55) 0%,
+                    rgba(201, 162, 39, 0.10) 55%,
+                    rgba(13, 13, 13, 0.9) 100%);
+        }
+
+        .visual-content {
+            position: relative;
+            z-index: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 3rem;
+        }
+
+        .visual-steps {
+            max-width: 300px;
+            margin-bottom: 2rem;
+        }
+
+        .visual-steps h3 {
+            font-family: var(--ff-display);
+            font-weight: 600;
+            font-size: 1.15rem;
+            margin-bottom: 1.2rem;
+            color: var(--gold);
+            letter-spacing: 0.01em;
+        }
+
+        .step {
+            display: flex;
+            gap: 0.9rem;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .step-num {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(201, 162, 39, 0.15);
+            border: 1px solid rgba(201, 162, 39, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--ff-display);
+            font-weight: 600;
+            font-size: 0.78rem;
+            color: var(--gold);
+            flex-shrink: 0;
+        }
+
+        .step-text {
+            font-size: 0.86rem;
+            color: var(--text-muted);
+            line-height: 1.45;
+        }
+
+        .step-text strong {
+            color: var(--white);
+            font-weight: 600;
+            display: block;
+        }
+
+        /* decoração */
+        .visual::after {
+            content: "";
+            position: absolute;
+            bottom: -80px;
+            left: -80px;
+            width: 320px;
+            height: 320px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(201, 162, 39, 0.18) 0%, transparent 70%);
+            z-index: 0;
+        }
+
+        /* ===== MOBILE ===== */
+        @media (max-width: 768px) {
+            body {
+                grid-template-columns: 1fr;
+            }
+
+            .visual {
+                display: none;
+            }
+
+            .form-side {
+                padding: 2.5rem 1.5rem;
+                justify-content: flex-start;
+                padding-top: 2.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- FORMULÁRIO (esquerda no desktop) -->
+    <main class="form-side">
+        <div class="form-box">
+
+            <a href="/" class="logo">ELITE<span>BARBER</span></a>
+
+            <div class="form-header">
+                <span class="form-tag">CRIE SUA CONTA</span>
+                <h1 class="form-title">Cadastrar</h1>
+                <p class="form-subtitle">
+                    Já tem uma conta? <a href="/login">Entrar</a>
+                </p>
+            </div>
+
+            <!-- Feedback -->
+            <div class="msg" id="mensagem" role="alert" aria-live="polite"></div>
+
+            <form id="cadastroForm" novalidate>
+
+                <!-- Nome -->
+                <div class="field">
+                    <label for="nome">Nome completo</label>
+                    <div class="input-wrap">
+                        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <circle cx="12" cy="8" r="4" />
+                            <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+                        </svg>
+                        <input type="text" id="nome" name="nome" placeholder="Seu nome" autocomplete="name" required
+                            minlength="2" />
+                    </div>
+                </div>
+
+                <!-- E-mail -->
+                <div class="field">
+                    <label for="email">E-mail</label>
+                    <div class="input-wrap">
+                        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <rect x="3" y="5" width="18" height="14" rx="2" />
+                            <path d="m3 7 9 6 9-6" />
+                        </svg>
+                        <input type="email" id="email" name="email" placeholder="seu@email.com" autocomplete="email"
+                            required />
+                    </div>
+                </div>
+
+                <!-- Senha -->
+                <div class="field">
+                    <label for="senha">Senha</label>
+                    <div class="input-wrap">
+                        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <rect x="3" y="11" width="18" height="11" rx="2" />
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        </svg>
+                        <input type="password" id="senha" name="senha" placeholder="Mínimo 6 caracteres"
+                            autocomplete="new-password" required minlength="6" />
+                        <button type="button" class="eye-btn" id="toggleSenha" aria-label="Mostrar/ocultar senha">
+                            <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" />
+                                <circle cx="12" cy="12" r="3" />
+                            </svg>
+                        </button>
+                    </div>
+                    <!-- Barra de força -->
+                    <div class="strength-bar" id="strengthBar" aria-hidden="true">
+                        <span id="s1"></span><span id="s2"></span><span id="s3"></span><span id="s4"></span>
+                    </div>
+                    <p class="strength-label" id="strengthLabel"></p>
+                </div>
+
+                <!-- Confirmar senha -->
+                <div class="field">
+                    <label for="confirmar">Confirmar senha</label>
+                    <div class="input-wrap">
+                        <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <path d="M9 12l2 2 4-4" />
+                            <rect x="3" y="11" width="18" height="11" rx="2" />
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                        </svg>
+                        <input type="password" id="confirmar" name="confirmar" placeholder="Repita a senha"
+                            autocomplete="new-password" required />
+                    </div>
+                </div>
+
+                <!-- Termos -->
+                <div class="checkbox-field">
+                    <input type="checkbox" id="termos" name="termos" required />
+                    <label for="termos">
+                        Li e aceito os <a href="#">Termos de Uso</a> e a <a href="#">Política de Privacidade</a>
+                    </label>
+                </div>
+
+                <!-- Submit -->
+                <div class="msg" id="mensagem2" style="display:none"></div>
+                <button type="submit" class="btn-submit" id="btnSubmit">
+                    <span class="spinner" id="spinner"></span>
+                    <span id="btnText">Criar minha conta</span>
+                </button>
+
+            </form>
+
+            <!-- Divisor -->
+            <div class="divider"><span>ou cadastre-se com</span></div>
+
+            <!-- Botões sociais -->
+            <div class="social-btns">
+
+                <button class="btn-social btn-google" type="button" id="btnGoogle">
+                    <svg width="20" height="20" viewBox="0 0 48 48">
+                        <path class="g-blue"
+                            d="M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z" />
+                        <path class="g-green"
+                            d="M24 46c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.1-7.45 2.1-5.73 0-10.58-3.87-12.32-9.07H4.34v5.7C7.96 41.07 15.4 46 24 46z" />
+                        <path class="g-yellow"
+                            d="M11.68 28.18A13.9 13.9 0 0 1 10.9 24c0-1.45.25-2.86.78-4.18v-5.7H4.34A23.93 23.93 0 0 0 0 24c0 3.88.93 7.55 2.57 10.79l7.11-5.52z" />
+                        <path class="g-red"
+                            d="M24 9.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 3.18 29.93 1 24 1 15.4 1 7.96 5.93 4.34 13.12l7.34 5.7C13.42 13.62 18.27 9.75 24 9.75z" />
+                    </svg>
+                    Cadastrar com Google
+                </button>
+
+                <button class="btn-social btn-facebook" type="button" id="btnFacebook">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="#1877F2">
+                        <path
+                            d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073c0 6.031 4.388 11.032 10.125 11.927v-8.437H7.078v-3.49h3.047V9.41c0-3.02 1.791-4.688 4.533-4.688 1.313 0 2.686.235 2.686.235v2.953h-1.513c-1.491 0-1.956.928-1.956 1.879v2.261h3.328l-.532 3.49h-2.796v8.437C19.612 23.105 24 18.104 24 12.073z" />
+                    </svg>
+                    Cadastrar com Facebook
+                </button>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- VISUAL (direita no desktop) -->
+    <aside class="visual">
+        <img src="../static/img/paralaxx.jpg" alt="" class="visual-img" />
+        <div class="visual-overlay"></div>
+        <div class="visual-content">
+            <div class="visual-steps">
+                <h3>Por que criar uma conta?</h3>
+                <div class="step">
+                    <div class="step-num">1</div>
+                    <div class="step-text">
+                        <strong>Agendamento rápido</strong>
+                        Marque seu horário em segundos, sem precisar ligar.
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">2</div>
+                    <div class="step-text">
+                        <strong>Histórico de serviços</strong>
+                        Acesse todos os seus cortes e preferências anteriores.
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-num">3</div>
+                    <div class="step-text">
+                        <strong>Ofertas exclusivas</strong>
+                        Receba promoções e novidades antes de todo mundo.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <script>
+        /* ===== TOGGLE SENHA ===== */
+        const toggleSenha = document.getElementById("toggleSenha");
+        const senhaInput = document.getElementById("senha");
+        const eyeIcon = document.getElementById("eyeIcon");
+
+        toggleSenha.addEventListener("click", () => {
+            const visivel = senhaInput.type === "text";
+            senhaInput.type = visivel ? "password" : "text";
+            eyeIcon.innerHTML = visivel
+                ? `<path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/>`
+                : `<path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94
+            M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19
+            m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+           <line x1="1" y1="1" x2="23" y2="23"/>`;
+        });
+
+        /* ===== FORÇA DA SENHA ===== */
+        const bars = [document.getElementById("s1"), document.getElementById("s2"),
+        document.getElementById("s3"), document.getElementById("s4")];
+        const label = document.getElementById("strengthLabel");
+        const cores = ["#ef4444", "#f97316", "#eab308", "#22c55e"];
+        const nomes = ["Muito fraca", "Fraca", "Boa", "Forte"];
+
+        senhaInput.addEventListener("input", () => {
+            const v = senhaInput.value;
+            let score = 0;
+            if (v.length >= 6) score++;
+            if (v.length >= 10) score++;
+            if (/[A-Z]/.test(v) && /[0-9]/.test(v)) score++;
+            if (/[^a-zA-Z0-9]/.test(v)) score++;
+
+            bars.forEach((b, i) => {
+                b.style.background = i < score ? cores[score - 1] : "rgba(255,255,255,0.08)";
+            });
+            label.textContent = v.length ? nomes[score - 1] || "" : "";
+            label.style.color = v.length ? cores[score - 1] : "var(--text-muted)";
+        });
+
+        /* ===== FORMULÁRIO DE CADASTRO ===== */
+        const form = document.getElementById("cadastroForm");
+        const msgBox = document.getElementById("mensagem");
+        const btnSubmit = document.getElementById("btnSubmit");
+        const spinner = document.getElementById("spinner");
+        const btnText = document.getElementById("btnText");
+
+        function showMsg(texto, tipo = "error") {
+            msgBox.textContent = texto;
+            msgBox.className = `msg ${tipo}`;
+        }
+        function hideMsg() { msgBox.className = "msg"; msgBox.style.display = ""; }
+
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            hideMsg();
+
+            const nome = document.getElementById("nome").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const senha = document.getElementById("senha").value;
+            const confirmar = document.getElementById("confirmar").value;
+            const termos = document.getElementById("termos").checked;
+
+            /* validações no front */
+            if (nome.length < 2) { showMsg("Informe um nome válido."); return; }
+            if (!email.includes("@")) { showMsg("Informe um e-mail válido."); return; }
+            if (senha.length < 6) { showMsg("A senha precisa ter no mínimo 6 caracteres."); return; }
+            if (senha !== confirmar) { showMsg("As senhas não coincidem."); return; }
+            if (!termos) { showMsg("Você precisa aceitar os Termos de Uso."); return; }
+
+            btnSubmit.disabled = true;
+            spinner.style.display = "block";
+            btnText.textContent = "Criando conta…";
+
+            try {
+                const res = await fetch("/api/cadastro", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ nome, email, senha }),
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    showMsg(`Conta criada com sucesso! Bem-vindo, ${data.nome}. Redirecionando…`, "success");
+                    setTimeout(() => { window.location.href = "/"; }, 1400);
+                } else {
+                    showMsg(data.erro || "Não foi possível criar a conta. Tente novamente.");
+                }
+            } catch {
+                showMsg("Erro de conexão. Verifique sua internet e tente novamente.");
+            } finally {
+                btnSubmit.disabled = false;
+                spinner.style.display = "none";
+                btnText.textContent = "Criar minha conta";
+            }
+        });
+
+        /* ===== BOTÕES SOCIAIS ===== */
+        document.getElementById("btnGoogle").addEventListener("click", () => {
+            window.location.href = "/auth/google";
+        });
+        document.getElementById("btnFacebook").addEventListener("click", () => {
+            window.location.href = "/auth/facebook";
+        });
+    </script>
+
+</body>
+
+</html>

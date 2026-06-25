@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendar — Elite Barber</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,500;0,600;1,500;1,600&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/agendamento.css">
+</head>
+
+<body>
+
+    <header class="hd">
+        <a href="/" class="logo">Elite<em>Barber</em><sup>SP</sup></a>
+        <a href="../templates/index.html" class="hd-back">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 5l-7 7 7 7" />
+            </svg>
+            Voltar ao site
+        </a>
+    </header>
+
+    <div class="progress-bar">
+        <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <div class="arena" id="arena" data-active="1">
+
+        <!-- ════════════════ PAINEL 1: SERVIÇO ════════════════ -->
+        <div class="panel active" id="panel1" onclick="activate(1)">
+            <div class="panel-bg-num">01</div>
+            <div class="panel-tab">
+                <div class="tab-step"><span class="tab-num">1</span></div>
+                <span class="tab-label">Serviço</span>
+            </div>
+            <div class="panel-body">
+                <h2 class="panel-title">Escolha o<br><em>serviço</em></h2>
+                <p class="panel-sub">O que vamos fazer hoje?</p>
+
+                <p class="section-label">Serviços disponíveis</p>
+                <div class="svc-grid">
+
+                    <div class="svc-item" data-svc="Corte Masculino" data-price="60" data-dur="45min">
+                        <div class="svc-l">
+                            <div class="svc-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M6 3c0 0 6 4 12 3" />
+                                    <path d="M6 21c0 0 6-4 12-3" />
+                                    <path d="M9 12a3 3 0 100-6 3 3 0 000 6z" />
+                                    <path d="M18 6l-6 6 6 6" />
+                                </svg>
+                            </div>
+                            <div class="svc-info">
+                                <h4>Corte Masculino</h4>
+                                <p>Clássico, degradê, tesoura — seu estilo.</p>
+                            </div>
+                        </div>
+                        <div class="svc-r">
+                            <span class="svc-price">R$ 60</span>
+                            <span class="svc-duration">45 min</span>
+                        </div>
+                    </div>
+
+                    <div class="svc-item" data-svc="Barba" data-price="45" data-dur="30min">
+                        <div class="svc-l">
+                            <div class="svc-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M7 3s-4 6-4 10a9 9 0 0018 0c0-4-4-10-4-10" />
+                                    <path d="M12 16v5" />
+                                </svg>
+                            </div>
+                            <div class="svc-info">
+                                <h4>Barba</h4>
+                                <p>Modelagem com toalha quente e navalha.</p>
+                            </div>
+                        </div>
+                        <div class="svc-r">
+                            <span class="svc-price">R$ 45</span>
+                            <span class="svc-duration">30 min</span>
+                        </div>
+                    </div>
+
+                    <div class="svc-item" data-svc="Corte + Barba" data-price="95" data-dur="75min">
+                        <div class="svc-l">
+                            <div class="svc-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" />
+                                </svg>
+                            </div>
+                            <div class="svc-info">
+                                <h4>Corte + Barba</h4>
+                                <p>O combo completo. Visual impecável.</p>
+                            </div>
+                        </div>
+                        <div class="svc-r">
+                            <span class="svc-price">R$ 95</span>
+                            <span class="badge">Popular</span>
+                            <span class="svc-duration">75 min</span>
+                        </div>
+                    </div>
+
+                    <div class="svc-item" data-svc="Sobrancelha" data-price="25" data-dur="20min">
+                        <div class="svc-l">
+                            <div class="svc-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M3 9c5-4 13-4 18 0" />
+                                    <path d="M6 14c3-2 9-2 12 0" />
+                                </svg>
+                            </div>
+                            <div class="svc-info">
+                                <h4>Sobrancelha</h4>
+                                <p>Design com navalha ou pinça, sem dor.</p>
+                            </div>
+                        </div>
+                        <div class="svc-r">
+                            <span class="svc-price">R$ 25</span>
+                            <span class="svc-duration">20 min</span>
+                        </div>
+                    </div>
+
+                    <div class="svc-item" data-svc="Pigmentação" data-price="70" data-dur="60min">
+                        <div class="svc-l">
+                            <div class="svc-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <circle cx="12" cy="12" r="9" />
+                                    <path d="M9 12l2 2 4-4" />
+                                </svg>
+                            </div>
+                            <div class="svc-info">
+                                <h4>Pigmentação</h4>
+                                <p>Preenchimento de falhas com precisão.</p>
+                            </div>
+                        </div>
+                        <div class="svc-r">
+                            <span class="svc-price">R$ 70</span>
+                            <span class="svc-duration">60 min</span>
+                        </div>
+                    </div>
+
+                    <div class="svc-item" data-svc="Acabamento" data-price="20" data-dur="15min">
+                        <div class="svc-l">
+                            <div class="svc-icon">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M4 12l4 4L20 4" />
+                                </svg>
+                            </div>
+                            <div class="svc-info">
+                                <h4>Acabamento</h4>
+                                <p>Contorno e nuca navalhada. Rápido e preciso.</p>
+                            </div>
+                        </div>
+                        <div class="svc-r">
+                            <span class="svc-price">R$ 20</span>
+                            <span class="svc-duration">15 min</span>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="btn-row">
+                    <button class="btn btn-gold" id="next1" disabled>
+                        Escolher data
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ════════════════ PAINEL 2: DATA ════════════════ -->
+        <div class="panel" id="panel2" onclick="activate(2)">
+            <div class="panel-bg-num">02</div>
+            <div class="panel-tab">
+                <div class="tab-step"><span class="tab-num">2</span></div>
+                <span class="tab-label">Data</span>
+            </div>
+            <div class="panel-body">
+                <h2 class="panel-title">Escolha a<br><em>data</em></h2>
+                <p class="panel-sub">Qual dia funciona melhor pra você?</p>
+
+                <div class="cal-hdr">
+                    <span class="cal-month" id="calMonth"></span>
+                    <div class="cal-nav">
+                        <button class="cal-btn" id="calPrev" title="Mês anterior">&#8249;</button>
+                        <button class="cal-btn" id="calNext" title="Próximo mês">&#8250;</button>
+                    </div>
+                </div>
+                <div class="cal-grid" id="calGrid"></div>
+
+                <div class="btn-row">
+                    <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();activate(1)">← Voltar</button>
+                    <button class="btn btn-gold" id="next2" disabled>
+                        Escolher horário
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ════════════════ PAINEL 3: HORÁRIO ════════════════ -->
+        <div class="panel" id="panel3" onclick="activate(3)">
+            <div class="panel-bg-num">03</div>
+            <div class="panel-tab">
+                <div class="tab-step"><span class="tab-num">3</span></div>
+                <span class="tab-label">Horário</span>
+            </div>
+            <div class="panel-body">
+                <h2 class="panel-title">Qual o melhor<br><em>horário?</em></h2>
+                <p class="panel-sub" id="p3sub">Selecione um horário disponível.</p>
+
+                <div id="timeGridWrap"></div>
+
+                <div class="notice">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <circle cx="12" cy="12" r="9" />
+                        <path d="M12 8v5M12 16h.01" />
+                    </svg>
+                    <p>Horários riscados já estão reservados. O seu ficará bloqueado após a confirmação.</p>
+                </div>
+
+                <div class="btn-row">
+                    <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();activate(2)">← Voltar</button>
+                    <button class="btn btn-gold" id="next3" disabled>
+                        Seus dados
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ════════════════ PAINEL 4: CONFIRMAÇÃO ════════════════ -->
+        <div class="panel" id="panel4" onclick="activate(4)">
+            <div class="panel-bg-num">04</div>
+            <div class="panel-tab">
+                <div class="tab-step"><span class="tab-num">4</span></div>
+                <span class="tab-label">Confirmar</span>
+            </div>
+            <div class="panel-body" id="p4body"></div>
+        </div>
+
+    </div>
+
+    <script src="../static/js/agendamento.js"></script>
+
+    </script>
+</body>
+
+</html>
