@@ -1,0 +1,163 @@
+/* ============================================================
+   HEADER GLOBAL — área do usuário (avatar, dropdown, login)
+   Depende dos tokens definidos em :root no style.css.
+   Carregue style.css ANTES deste arquivo.
+   ============================================================ */
+
+.hd-actions {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+/* ===== LINK "ENTRAR" (visitante não logado) ===== */
+.hd-login-link {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--white);
+  padding: 0.55rem 1.1rem;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  transition:
+    border-color 0.25s,
+    color 0.25s;
+}
+.hd-login-link:hover {
+  border-color: var(--gold);
+  color: var(--gold-light);
+}
+
+/* ===== ÁREA DO USUÁRIO LOGADO ===== */
+.user-area {
+  position: relative;
+}
+
+.user-trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: 0.3rem 0.6rem 0.3rem 0.3rem;
+  border-radius: 999px;
+  transition: background 0.25s;
+}
+.user-trigger:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.avatar-img {
+  object-fit: cover;
+  border: 1px solid rgba(201, 162, 39, 0.4);
+}
+.avatar-fallback {
+  background: rgba(201, 162, 39, 0.16);
+  color: var(--gold);
+  font-family: var(--ff-display);
+  font-weight: 600;
+  font-size: 0.92rem;
+  border: 1px solid rgba(201, 162, 39, 0.4);
+}
+
+.user-name {
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--white);
+  max-width: 140px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.user-caret {
+  width: 14px;
+  height: 14px;
+  color: var(--text-muted);
+  transition: transform 0.25s var(--ease);
+}
+.user-area.open .user-caret {
+  transform: rotate(180deg);
+}
+
+/* ===== DROPDOWN ===== */
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  min-width: 220px;
+  background: var(--dark-2);
+  border: 1px solid rgba(201, 162, 39, 0.18);
+  border-radius: 14px;
+  padding: 0.5rem;
+  box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-6px);
+  transition:
+    opacity 0.22s var(--ease),
+    transform 0.22s var(--ease),
+    visibility 0.22s;
+}
+.user-area.open .dropdown-menu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.dropdown-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  font-family: var(--ff-body);
+  font-size: 0.86rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  background: none;
+  border: 0;
+  padding: 0.65rem 0.8rem;
+  border-radius: 9px;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+.dropdown-item:hover {
+  background: rgba(201, 162, 39, 0.1);
+  color: var(--white);
+}
+.dropdown-item-danger {
+  color: #e26b6b;
+}
+.dropdown-item-danger:hover {
+  background: rgba(226, 107, 107, 0.12);
+  color: #ff8a8a;
+}
+.dropdown-divider {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 0.4rem 0.3rem;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+  .hd-login-link {
+    padding: 0.45rem 0.85rem;
+    font-size: 0.82rem;
+  }
+  .user-name {
+    display: none;
+  }
+  .dropdown-menu {
+    min-width: 200px;
+  }
+}

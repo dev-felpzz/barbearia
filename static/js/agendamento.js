@@ -1,32 +1,22 @@
-/* ─── STATE ─────────────────────────────────────────────────────── */
-const B = {
-  svc: null,
-  price: null,
-  dur: null,
-  date: null,
-  time: null,
-  name: "",
-  phone: "",
-};
-const BARBER_WA = "5511999999999";
+/* ============================================================
+   ELITE BARBER — agendamento.js
+   Controla: painéis, calendário, horários, confirmação, WhatsApp
+   ============================================================ */
 
-const SCHEDULE = {
-  manhã: ["09:00", "09:30", "10:00", "10:30", "11:00", "11:30"],
-  tarde: [
-    "13:00",
-    "13:30",
-    "14:00",
-    "14:30",
-    "15:00",
-    "15:30",
-    "16:00",
-    "16:30",
-  ],
-  noite: ["17:00", "17:30", "18:00", "18:30", "19:00"],
+/* ===== STATE ===== */
+const state = {
+  svc: null /* { nome, price, dur } */,
+  data: null /* Date */,
+  hora: null /* "09:00" */,
+  nome: "",
+  tel: "",
 };
-const OCUPADOS = ["10:00", "14:00", "16:30", "18:00"];
 
-const MONTHS = [
+/* ===== HORÁRIOS FICTÍCIOS OCUPADOS (demo) ===== */
+const BUSY = ["09:30", "10:30", "14:00", "15:30", "17:00"];
+
+/* ===== MESES PT-BR ===== */
+const MESES = [
   "Janeiro",
   "Fevereiro",
   "Março",
@@ -40,308 +30,400 @@ const MONTHS = [
   "Novembro",
   "Dezembro",
 ];
-const DAYS_PT = ["D", "S", "T", "Q", "Q", "S", "S"];
+const DIAS_SEMANA = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
 
-let calDate = new Date();
-calDate.setDate(1);
-
-/* ─── PROGRESS ──────────────────────────────────────────────────── */
-function setProgress(n) {
-  document.getElementById("progressFill").style.width = n * 25 + "%";
-}
-
-/* ─── ACTIVATE ──────────────────────────────────────────────────── */
+/* ============================================================
+   PAINÉIS
+   ============================================================ */
 function activate(n) {
-  if (n === 2 && !B.svc) return;
-  if (n === 3 && !B.date) return;
-  if (n === 4 && !B.time) return;
-  document.querySelectorAll(".panel").forEach((p, i) => {
-    const step = i + 1;
-    p.classList.toggle("active", step === n);
-    p.classList.toggle(
-      "done",
-      step < n &&
-        ((step === 1 && B.svc) ||
-          (step === 2 && B.date) ||
-          (step === 3 && B.time)),
-    );
+  const arena = document.getElementById("arena");
+  const panels = document.querySelectorAll(".panel");
+
+  /* Só permite abrir um painel que já tenha sido liberado */
+  if (n === 2 && !state.svc) return;
+  if (n === 3 && !state.data) return;
+  if (n === 4 && !state.hora) return;
+
+  panels.forEach((p, i) => {
+    p.classList.toggle("active", i === n - 1);
   });
-  document.getElementById("arena").dataset.active = n;
-  setProgress(n);
-  if (n === 3) renderTimes();
-  if (n === 4) renderP4();
+
+  arena.dataset.active = n;
+  updateProgress(n);
+
+  /* Ao abrir painel 3, atualiza sub com a data selecionada */
+  if (n === 3) {
+    const sub = document.getElementById("p3sub");
+    if (sub && state.data) {
+      sub.textContent = `Horários para ${formatDate(state.data)}`;
+    }
+  }
+
+  /* Ao abrir painel 4, renderiza confirmação */
+  if (n === 4) renderConfirm();
 }
 
-/* ─── SERVICES ──────────────────────────────────────────────────── */
-document.querySelectorAll(".svc-item").forEach((el) => {
-  el.addEventListener("click", (e) => {
+/* ============================================================
+   PROGRESS BAR
+   ============================================================ */
+function updateProgress(step) {
+  const fill = document.getElementById("progressFill");
+  if (!fill) return;
+  fill.style.width = (step / 4) * 100 + "%";
+}
+
+/* ============================================================
+   SERVIÇOS
+   ============================================================ */
+document.querySelectorAll(".svc-item").forEach((item) => {
+  item.addEventListener("click", (e) => {
     e.stopPropagation();
+
     document
       .querySelectorAll(".svc-item")
       .forEach((i) => i.classList.remove("selected"));
-    el.classList.add("selected");
-    B.svc = el.dataset.svc;
-    B.price = el.dataset.price;
-    B.dur = el.dataset.dur;
-    document.getElementById("next1").disabled = false;
+    item.classList.add("selected");
+
+    state.svc = {
+      nome: item.dataset.svc,
+      price: Number(item.dataset.price),
+      dur: item.dataset.dur,
+    };
+
+    const btn = document.getElementById("next1");
+    if (btn) {
+      btn.disabled = false;
+      btn.style.animation = ""; /* reset */
+    }
   });
 });
-document.getElementById("next1").addEventListener("click", (e) => {
-  e.stopPropagation();
-  activate(2);
-});
 
-/* ─── CALENDAR ──────────────────────────────────────────────────── */
-function renderCal() {
+const next1 = document.getElementById("next1");
+if (next1) {
+  next1.addEventListener("click", (e) => {
+    e.stopPropagation();
+    activate(2);
+  });
+}
+
+/* ============================================================
+   CALENDÁRIO
+   ============================================================ */
+let calDate = new Date();
+calDate.setDate(1);
+
+function buildCalendar() {
+  const grid = document.getElementById("calGrid");
+  const label = document.getElementById("calMonth");
+  if (!grid || !label) return;
+
+  const year = calDate.getFullYear();
+  const month = calDate.getMonth();
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const y = calDate.getFullYear(),
-    m = calDate.getMonth();
-  document.getElementById("calMonth").textContent = `${MONTHS[m]} ${y}`;
-  const g = document.getElementById("calGrid");
-  g.innerHTML = "";
 
-  DAYS_PT.forEach((d) => {
-    const s = document.createElement("span");
-    s.className = "cal-dn";
-    s.textContent = d;
-    g.appendChild(s);
-  });
+  label.textContent = `${MESES[month]} ${year}`;
 
-  const firstDay = new Date(y, m, 1).getDay();
-  const daysInMonth = new Date(y, m + 1, 0).getDate();
+  /* Cabeçalhos dias semana */
+  let html = DIAS_SEMANA.map(
+    (d) => `<div class="cal-day cal-head">${d}</div>`,
+  ).join("");
 
-  for (let i = 0; i < firstDay; i++)
-    g.appendChild(document.createElement("span"));
+  /* Primeiro dia do mês e dias preenchidos do mês anterior */
+  const firstWeekDay = new Date(year, month, 1).getDay();
+  const prevMonth = new Date(year, month, 0);
 
-  for (let d = 1; d <= daysInMonth; d++) {
-    const btn = document.createElement("button");
-    btn.className = "cal-day";
-    btn.textContent = d;
-    const dt = new Date(y, m, d);
-    dt.setHours(0, 0, 0, 0);
-    if (dt < today || dt.getDay() === 0) {
-      btn.disabled = true;
-    } else {
-      if (dt.getTime() === today.getTime()) btn.classList.add("today");
-      if (B.date && B.date.getTime() === dt.getTime())
-        btn.classList.add("selected");
-      btn.addEventListener("click", (e) => {
-        e.stopPropagation();
-        document
-          .querySelectorAll(".cal-day")
-          .forEach((b) => b.classList.remove("selected"));
-        btn.classList.add("selected");
-        B.date = dt;
-        B.time = null;
-        document.getElementById("next2").disabled = false;
-      });
-    }
-    g.appendChild(btn);
+  for (let i = firstWeekDay - 1; i >= 0; i--) {
+    html += `<div class="cal-day other-month">${prevMonth.getDate() - i}</div>`;
   }
+
+  /* Dias do mês atual */
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  for (let d = 1; d <= daysInMonth; d++) {
+    const date = new Date(year, month, d);
+    date.setHours(0, 0, 0, 0);
+
+    const isPast = date < today;
+    const isSunday = date.getDay() === 0;
+    const isToday = date.getTime() === today.getTime();
+    const isSelected =
+      state.data &&
+      date.getTime() === new Date(state.data).setHours(0, 0, 0, 0);
+
+    let cls = "cal-day";
+    if (isPast || isSunday) cls += " past";
+    if (isToday) cls += " today";
+    if (isSelected) cls += " selected";
+
+    const disabled = isPast || isSunday;
+    html += `<div class="${cls}" ${disabled ? "" : `data-date="${date.toISOString()}"`}>${d}</div>`;
+  }
+
+  /* Completar última linha */
+  const totalCells = firstWeekDay + daysInMonth;
+  const remainder = 7 - (totalCells % 7);
+  if (remainder < 7) {
+    for (let d = 1; d <= remainder; d++) {
+      html += `<div class="cal-day other-month">${d}</div>`;
+    }
+  }
+
+  grid.innerHTML = html;
+
+  /* Eventos nos dias */
+  grid.querySelectorAll(".cal-day[data-date]").forEach((cell) => {
+    cell.addEventListener("click", () => {
+      grid
+        .querySelectorAll(".cal-day")
+        .forEach((c) => c.classList.remove("selected"));
+      cell.classList.add("selected");
+
+      state.data = new Date(cell.dataset.date);
+      state.hora = null; /* reset horário ao trocar data */
+
+      const next2 = document.getElementById("next2");
+      if (next2) next2.disabled = false;
+
+      buildTimeGrid();
+    });
+  });
 }
 
-document.getElementById("calPrev").addEventListener("click", (e) => {
+document.getElementById("calPrev")?.addEventListener("click", (e) => {
   e.stopPropagation();
-  const now = new Date();
-  now.setDate(1);
-  now.setHours(0, 0, 0, 0);
-  const prev = new Date(calDate.getFullYear(), calDate.getMonth() - 1, 1);
-  if (prev >= now) {
-    calDate.setMonth(calDate.getMonth() - 1);
-    renderCal();
-  }
+  calDate.setMonth(calDate.getMonth() - 1);
+  buildCalendar();
 });
-document.getElementById("calNext").addEventListener("click", (e) => {
+
+document.getElementById("calNext")?.addEventListener("click", (e) => {
   e.stopPropagation();
   calDate.setMonth(calDate.getMonth() + 1);
-  renderCal();
+  buildCalendar();
 });
-document.getElementById("next2").addEventListener("click", (e) => {
+
+document.getElementById("next2")?.addEventListener("click", (e) => {
   e.stopPropagation();
   activate(3);
+  buildTimeGrid();
 });
-renderCal();
 
-/* ─── TIMES ─────────────────────────────────────────────────────── */
-function renderTimes() {
+buildCalendar();
+
+/* ============================================================
+   GRID DE HORÁRIOS
+   ============================================================ */
+function buildTimeGrid() {
   const wrap = document.getElementById("timeGridWrap");
-  wrap.innerHTML = "";
-  if (B.date) {
-    const opts = { weekday: "long", day: "2-digit", month: "long" };
-    document.getElementById("p3sub").textContent =
-      `Disponíveis para ${B.date.toLocaleDateString("pt-BR", opts)}.`;
+  if (!wrap) return;
+
+  const slots = generateSlots("09:00", "19:00", 30);
+
+  /* Agrupa por período */
+  const manha = slots.filter((h) => parseInt(h) < 12);
+  const tarde = slots.filter((h) => parseInt(h) >= 12 && parseInt(h) < 17);
+  const noite = slots.filter((h) => parseInt(h) >= 17);
+
+  function renderGroup(label, list) {
+    if (!list.length) return "";
+    const items = list
+      .map((h) => {
+        const busy = BUSY.includes(h);
+        const sel = state.hora === h;
+        let cls = "time-slot";
+        if (busy) cls += " busy";
+        if (sel) cls += " selected";
+        return `<div class="${cls}" data-time="${h}" ${busy ? "aria-disabled='true'" : ""}>${h}</div>`;
+      })
+      .join("");
+    return `<span class="time-section-label">${label}</span><div class="time-grid">${items}</div>`;
   }
 
-  for (const [period, times] of Object.entries(SCHEDULE)) {
-    const lbl = document.createElement("p");
-    lbl.className = "time-section-label";
-    lbl.textContent = period.charAt(0).toUpperCase() + period.slice(1);
-    wrap.appendChild(lbl);
-    const grid = document.createElement("div");
-    grid.className = "time-grid";
-    wrap.appendChild(grid);
+  wrap.innerHTML =
+    renderGroup("Manhã", manha) +
+    renderGroup("Tarde", tarde) +
+    renderGroup("Noite", noite);
 
-    times.forEach((t) => {
-      const btn = document.createElement("button");
-      btn.className = "time-btn";
-      btn.textContent = t;
-      if (OCUPADOS.includes(t)) {
-        btn.classList.add("ocupado");
-        btn.disabled = true;
-        const tag = document.createElement("span");
-        tag.className = "time-tag";
-        tag.textContent = "ocupado";
-        btn.appendChild(tag);
-      } else {
-        if (B.time === t) btn.classList.add("selected");
-        btn.addEventListener("click", (e) => {
-          e.stopPropagation();
-          document
-            .querySelectorAll(".time-btn")
-            .forEach((b) => b.classList.remove("selected"));
-          btn.classList.add("selected");
-          B.time = t;
-          document.getElementById("next3").disabled = false;
-        });
-      }
-      grid.appendChild(btn);
+  /* Eventos */
+  wrap.querySelectorAll(".time-slot:not(.busy)").forEach((slot) => {
+    slot.addEventListener("click", () => {
+      wrap
+        .querySelectorAll(".time-slot")
+        .forEach((s) => s.classList.remove("selected"));
+      slot.classList.add("selected");
+
+      state.hora = slot.dataset.time;
+
+      const next3 = document.getElementById("next3");
+      if (next3) next3.disabled = false;
     });
-  }
+  });
 }
-document.getElementById("next3").addEventListener("click", (e) => {
+
+document.getElementById("next3")?.addEventListener("click", (e) => {
   e.stopPropagation();
   activate(4);
 });
 
-/* ─── PANEL 4 ───────────────────────────────────────────────────── */
-function renderP4() {
-  const fmtDate = B.date
-    ? B.date.toLocaleDateString("pt-BR", {
-        weekday: "long",
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-      })
-    : "";
+/* ============================================================
+   PAINEL 4 — CONFIRMAÇÃO
+   ============================================================ */
+function renderConfirm() {
+  const body = document.getElementById("p4body");
+  if (!body) return;
 
-  document.getElementById("p4body").innerHTML = `
-    <h2 class="panel-title">Seus<br><em>dados</em></h2>
-    <p class="panel-sub">Para enviar a confirmação no WhatsApp.</p>
+  body.innerHTML = `
+    <h2 class="panel-title">Confirmar<br><em>agendamento</em></h2>
+    <p class="panel-sub">Revise os dados e finalize pelo WhatsApp.</p>
 
-    <div class="summary">
-      <div class="sum-row"><span class="lbl">Serviço</span><strong class="val">${B.svc}</strong></div>
-      <div class="sum-row"><span class="lbl">Duração</span><strong class="val">${B.dur}</strong></div>
-      <div class="sum-row"><span class="lbl">Data</span><strong class="val">${fmtDate}</strong></div>
-      <div class="sum-row"><span class="lbl">Horário</span><strong class="val">${B.time}</strong></div>
-      <div class="sum-divider"></div>
-      <div class="sum-total"><span class="lbl">Total</span><span class="val">R$ ${B.price}</span></div>
-    </div>
-
-    <div class="form-row">
-      <div class="form-field">
-        <label for="fName">Nome completo</label>
-        <input id="fName" type="text" placeholder="Ex: João Silva" autocomplete="name">
+    <div class="confirm-summary">
+      <h3>Resumo</h3>
+      <div class="confirm-row">
+        <span>Serviço</span>
+        <span>${state.svc?.nome ?? "—"}</span>
       </div>
-      <div class="form-field">
-        <label for="fPhone">WhatsApp</label>
-        <input id="fPhone" type="tel" placeholder="(11) 9 0000-0000" maxlength="17" inputmode="numeric">
+      <div class="confirm-row">
+        <span>Duração</span>
+        <span>${state.svc?.dur ?? "—"}</span>
+      </div>
+      <div class="confirm-row">
+        <span>Data</span>
+        <span>${state.data ? formatDate(state.data) : "—"}</span>
+      </div>
+      <div class="confirm-row">
+        <span>Horário</span>
+        <span>${state.hora ?? "—"}</span>
+      </div>
+      <div class="confirm-row total">
+        <span>Total</span>
+        <span>R$ ${state.svc?.price ?? 0}</span>
       </div>
     </div>
-    <div class="form-field">
-      <label for="fNote">Observação (opcional)</label>
-      <input id="fNote" type="text" placeholder="Ex: Prefiro degradê alto, trazer foto">
+
+    <div class="confirm-fields">
+      <div class="confirm-field">
+        <label for="cfNome">Seu nome</label>
+        <input type="text" id="cfNome" placeholder="Nome completo" autocomplete="name" />
+      </div>
+      <div class="confirm-field">
+        <label for="cfTel">WhatsApp</label>
+        <input type="tel" id="cfTel" placeholder="(11) 9 0000-0000" autocomplete="tel" maxlength="16" />
+      </div>
     </div>
-    <p class="hint" style="font-size:.7rem;color:var(--color-text-d);margin-top:-.4rem;margin-bottom:.6rem">Você receberá a confirmação neste WhatsApp logo após o agendamento.</p>
+
+    <div id="confirmMsg" class="msg" role="alert" aria-live="polite" style="display:none"></div>
 
     <div class="btn-row">
-      <button class="btn btn-ghost btn-sm" onclick="activate(3)">← Voltar</button>
-      <button class="btn btn-gold" id="btnOk" disabled>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
-        Confirmar agendamento
+      <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();activate(3)">← Voltar</button>
+      <button class="btn btn-whatsapp" id="btnWhatsapp" onclick="event.stopPropagation();sendWhatsApp()">
+        <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+          <path d="M12 0C5.373 0 0 5.373 0 12c0 2.108.549 4.092 1.51 5.814L.057 23.58a.5.5 0 0 0 .611.628l5.918-1.55A11.95 11.95 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.956 9.956 0 0 1-5.073-1.383l-.363-.218-3.758.984.999-3.658-.237-.378A9.956 9.956 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/>
+        </svg>
+        Confirmar no WhatsApp
       </button>
-    </div>`;
+    </div>
+  `;
 
-  const validate = () => {
-    const n = document.getElementById("fName").value.trim();
-    const p = document.getElementById("fPhone").value.replace(/\D/g, "");
-    document.getElementById("btnOk").disabled = !(
-      n.length >= 2 && p.length >= 10
-    );
-  };
-
-  document.getElementById("fPhone").addEventListener("input", (e) => {
-    let v = e.target.value.replace(/\D/g, "").slice(0, 11);
-    if (v.length >= 7) v = `(${v.slice(0, 2)}) ${v.slice(2, 7)}-${v.slice(7)}`;
-    else if (v.length >= 3) v = `(${v.slice(0, 2)}) ${v.slice(2)}`;
-    e.target.value = v;
-    validate();
-  });
-  document.getElementById("fName").addEventListener("input", validate);
-
-  document.getElementById("btnOk").addEventListener("click", (e) => {
-    e.stopPropagation();
-    B.name = document.getElementById("fName").value.trim();
-    B.phone = document.getElementById("fPhone").value;
-    B.note = document.getElementById("fNote").value.trim();
-    showSuccess();
-  });
+  /* Máscara telefone */
+  const telInput = document.getElementById("cfTel");
+  if (telInput) {
+    telInput.addEventListener("input", () => {
+      let v = telInput.value.replace(/\D/g, "");
+      if (v.length > 11) v = v.slice(0, 11);
+      if (v.length > 7)
+        v = `(${v.slice(0, 2)}) ${v.slice(2, 3)} ${v.slice(3, 7)}-${v.slice(7)}`;
+      else if (v.length > 2) v = `(${v.slice(0, 2)}) ${v.slice(2)}`;
+      telInput.value = v;
+    });
+  }
 }
 
-/* ─── SUCCESS ───────────────────────────────────────────────────── */
-function showSuccess() {
-  const fmtDate = B.date.toLocaleDateString("pt-BR", {
+function sendWhatsApp() {
+  const nome = document.getElementById("cfNome")?.value.trim() ?? "";
+  const tel = document.getElementById("cfTel")?.value.trim() ?? "";
+  const msg = document.getElementById("confirmMsg");
+
+  if (!nome) {
+    showConfirmMsg("Informe seu nome.");
+    return;
+  }
+  if (tel.replace(/\D/g, "").length < 10) {
+    showConfirmMsg("Informe um WhatsApp válido.");
+    return;
+  }
+
+  state.nome = nome;
+  state.tel = tel;
+
+  const texto = encodeURIComponent(
+    `Olá, Elite Barber! Gostaria de agendar:\n\n` +
+      `👤 *${nome}*\n` +
+      `✂️ Serviço: *${state.svc?.nome}*\n` +
+      `📅 Data: *${formatDate(state.data)}*\n` +
+      `🕐 Horário: *${state.hora}*\n` +
+      `💰 Total: *R$ ${state.svc?.price}*\n\n` +
+      `Confirma esse horário? 🙏`,
+  );
+
+  /* Troque pelo número real da barbearia */
+  const numero = "5511999999999";
+  window.open(`https://wa.me/${numero}?text=${texto}`, "_blank");
+
+  /* Feedback de sucesso */
+  const body = document.getElementById("p4body");
+  if (body) {
+    body.innerHTML = `
+      <div class="success-msg">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <path d="M20 6L9 17l-5-5"/>
+          </svg>
+        </div>
+        <h3>Tudo certo, ${nome.split(" ")[0]}!</h3>
+        <p>Sua mensagem foi enviada pelo WhatsApp. Aguarde a confirmação da Elite Barber.</p>
+      </div>
+      <div class="btn-row" style="justify-content:center;margin-top:1.5rem">
+        <a href="/" class="btn btn-ghost btn-sm">← Voltar ao site</a>
+      </div>
+    `;
+  }
+}
+
+function showConfirmMsg(texto) {
+  const el = document.getElementById("confirmMsg");
+  if (!el) return;
+  el.textContent = texto;
+  el.className = "msg error";
+  el.style.display = "flex";
+  setTimeout(() => {
+    el.style.display = "none";
+  }, 4000);
+}
+
+/* ============================================================
+   HELPERS
+   ============================================================ */
+function generateSlots(start, end, step) {
+  const slots = [];
+  let [h, m] = start.split(":").map(Number);
+  const [eh, em] = end.split(":").map(Number);
+  while (h < eh || (h === eh && m < em)) {
+    slots.push(`${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`);
+    m += step;
+    if (m >= 60) {
+      h++;
+      m -= 60;
+    }
+  }
+  return slots;
+}
+
+function formatDate(date) {
+  if (!date) return "—";
+  return new Date(date).toLocaleDateString("pt-BR", {
     weekday: "long",
-    day: "2-digit",
+    day: "numeric",
     month: "long",
     year: "numeric",
   });
-  const note = B.note ? `\n📝 Obs: ${B.note}` : "";
-
-  const msgCliente = `✂️ *Agendamento Elite Barber confirmado!*\n\nOlá, *${B.name}*! Confira seu agendamento:\n\n📌 *${B.svc}*\n📅 ${fmtDate}\n⏰ ${B.time} (${B.dur})\n💰 R$ ${B.price}${note}\n\n📍 Rua Augusta, 1200 — Consolação, SP\n\nAté lá! Se precisar reagendar, manda mensagem. 💈`;
-  const msgBarbeiro = `💈 *Novo agendamento!*\n\n👤 ${B.name}\n📞 ${B.phone}\n✂️ ${B.svc}\n📅 ${fmtDate} às ${B.time}\n💰 R$ ${B.price}${note}`;
-
-  const ph = B.phone.replace(/\D/g, "");
-  const waCliente = `https://wa.me/55${ph}?text=${encodeURIComponent(msgCliente)}`;
-  const waBarbeiro = `https://wa.me/${BARBER_WA}?text=${encodeURIComponent(msgBarbeiro)}`;
-
-  // mark all done
-  document.querySelectorAll(".panel").forEach((p) => p.classList.add("done"));
-  setProgress(4);
-
-  document.getElementById("p4body").innerHTML = `
-    <div class="success-wrap">
-      <div class="check-ring">
-        <div class="check-inner">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
-        </div>
-      </div>
-      <h2 class="success-title">Tudo<br><em>confirmado!</em></h2>
-      <p class="success-sub">${B.name}, seu horário das <strong>${B.time}</strong> está reservado.<br>Em instantes você recebe a confirmação no WhatsApp.</p>
-
-      <div class="summary" style="text-align:left;margin-bottom:1.2rem;">
-        <div class="sum-row"><span class="lbl">Serviço</span><strong class="val">${B.svc}</strong></div>
-        <div class="sum-row"><span class="lbl">Data</span><strong class="val">${B.date.toLocaleDateString("pt-BR", { day: "2-digit", month: "long" })}</strong></div>
-        <div class="sum-row"><span class="lbl">Horário</span><strong class="val">${B.time}</strong></div>
-        <div class="sum-divider"></div>
-        <div class="sum-total"><span class="lbl">Total</span><span class="val">R$ ${B.price}</span></div>
-      </div>
-
-      <div class="wa-card">
-        <div class="wa-icon">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 3.5A11 11 0 003.6 17L2 22l5.2-1.6A11 11 0 1020.5 3.5z"/></svg>
-        </div>
-        <div class="wa-text">
-          <p><strong>WhatsApp enviado!</strong><br>Você e o barbeiro foram notificados com todos os detalhes do agendamento.</p>
-        </div>
-      </div>
-
-      <div class="btn-row" style="justify-content:center;flex-wrap:wrap;">
-        <a href="${waCliente}" target="_blank" rel="noopener" class="btn btn-wa" onclick="setTimeout(()=>window.open('${waBarbeiro}','_blank'),600)">
-          <svg viewBox="0 0 24 24" fill="currentColor" width="15" height="15"><path d="M20.5 3.5A11 11 0 003.6 17L2 22l5.2-1.6A11 11 0 1020.5 3.5z"/></svg>
-          Ver no WhatsApp
-        </a>
-        <a href="/" class="btn btn-ghost btn-sm">Voltar ao site</a>
-      </div>
-    </div>`;
 }

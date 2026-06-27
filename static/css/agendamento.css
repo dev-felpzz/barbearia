@@ -1,0 +1,1336 @@
+/* ============================================================
+   ELITE BARBER — Agendamento
+   Design System: Dark Luxury · Gold · Fraunces + Inter
+   Accordion side-panel layout · 4 steps
+   ============================================================ */
+
+/* ===== TOKENS ===== */
+:root {
+  --black: #0d0d0d;
+  --dark: #1e1e1e;
+  --dark-2: #161616;
+  --dark-3: #252525;
+  --dark-4: #2e2e2e;
+  --white: #ffffff;
+  --gold: #c9a227;
+  --gold-light: #e0bc4a;
+  --gold-dim: rgba(201, 162, 39, 0.1);
+  --gold-border: rgba(201, 162, 39, 0.22);
+  --gold-glow: rgba(201, 162, 39, 0.55);
+  --text-muted: #a8a8a8;
+  --text-dim: rgba(168, 168, 168, 0.55);
+  --radius: 16px;
+  --radius-sm: 10px;
+  --radius-pill: 50px;
+
+  --ff-display: "Fraunces", serif;
+  --ff-body: "Inter", sans-serif;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Panel dimensions */
+  --panel-collapsed: 72px;
+  --hd-height: 68px;
+  --progress-h: 3px;
+}
+
+/* ===== RESET & BASE ===== */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  font-family: var(--ff-body);
+  background: var(--black);
+  color: var(--white);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+ul {
+  list-style: none;
+}
+
+em {
+  font-style: italic;
+  color: var(--gold);
+  font-family: var(--ff-display);
+}
+
+::selection {
+  background: var(--gold);
+  color: var(--black);
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--black);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--gold);
+  border-radius: 3px;
+}
+
+/* ===== KEYFRAMES ===== */
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes progressGrow {
+  from {
+    width: 0;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Glow pulsante no botão gold */
+@keyframes goldPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(201, 162, 39, 0.55);
+  }
+  70% {
+    box-shadow: 0 0 0 18px rgba(201, 162, 39, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(201, 162, 39, 0);
+  }
+}
+
+@keyframes shimmer {
+  from {
+    left: -80%;
+  }
+  to {
+    left: 130%;
+  }
+}
+
+/* Entrada dos itens de serviço em cascata */
+@keyframes svcIn {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* Pulso do número de fundo do painel */
+@keyframes numFade {
+  from {
+    opacity: 0;
+    transform: scale(0.88);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.hd {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--hd-height);
+  z-index: 100;
+  background: rgba(13, 13, 13, 0.82);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border-bottom: 1px solid var(--gold-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(1.2rem, 3vw, 2.4rem);
+  animation: fadeIn 0.5s ease both;
+}
+
+/* Logo */
+.logo {
+  font-family: var(--ff-display);
+  font-weight: 600;
+  font-size: 1.45rem;
+  letter-spacing: 0.01em;
+  color: var(--white);
+  display: flex;
+  align-items: baseline;
+  gap: 0.05em;
+  transition: opacity 0.2s;
+}
+
+.logo:hover {
+  opacity: 0.8;
+}
+
+.logo em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.logo sup {
+  font-family: var(--ff-body);
+  font-size: 0.5em;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  margin-left: 0.15em;
+  vertical-align: super;
+}
+
+/* Botão voltar */
+.hd-back {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.83rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+  transition: color 0.2s;
+}
+
+.hd-back svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.25s var(--ease);
+}
+
+.hd-back:hover {
+  color: var(--white);
+}
+
+.hd-back:hover svg {
+  transform: translateX(-3px);
+}
+
+/* ============================================================
+   PROGRESS BAR
+   ============================================================ */
+.progress-bar {
+  position: fixed;
+  top: var(--hd-height);
+  left: 0;
+  width: 100%;
+  height: var(--progress-h);
+  background: rgba(255, 255, 255, 0.05);
+  z-index: 99;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light));
+  border-radius: 0 2px 2px 0;
+  width: 25%; /* JS atualiza */
+  transition: width 0.55s var(--ease);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Brilho deslizante na barra */
+.progress-fill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.35) 50%,
+    transparent 100%
+  );
+  animation: shimmer 1.8s ease infinite;
+}
+
+/* ============================================================
+   ARENA — container dos painéis
+   ============================================================ */
+.arena {
+  display: flex;
+  min-height: 100vh;
+  padding-top: calc(var(--hd-height) + var(--progress-h));
+}
+
+/* ============================================================
+   PANEL — base
+   ============================================================ */
+.panel {
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  background: var(--dark-2);
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  transition:
+    flex 0.62s var(--ease),
+    background 0.4s,
+    border-color 0.4s;
+
+  /* Collapsed por padrão */
+  flex: 0 0 var(--panel-collapsed);
+}
+
+/* Painel ativo cresce para ocupar o espaço */
+.panel.active {
+  flex: 1 1 0;
+  cursor: default;
+  background: var(--black);
+  border-right-color: var(--gold-border);
+}
+
+/* Último painel sem borda direita */
+.panel:last-child {
+  border-right: none;
+}
+
+/* Borda dourada no topo do painel ativo */
+.panel.active::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--gold),
+    var(--gold-light),
+    transparent
+  );
+  z-index: 2;
+  animation: fadeIn 0.4s ease both;
+}
+
+/* Número decorativo de fundo */
+.panel-bg-num {
+  position: absolute;
+  bottom: -0.15em;
+  right: -0.08em;
+  font-family: var(--ff-display);
+  font-weight: 600;
+  font-size: clamp(7rem, 18vw, 16rem);
+  line-height: 1;
+  color: rgba(255, 255, 255, 0.025);
+  user-select: none;
+  pointer-events: none;
+  z-index: 0;
+  letter-spacing: -0.04em;
+  transition:
+    color 0.4s,
+    transform 0.6s var(--ease);
+}
+
+.panel.active .panel-bg-num {
+  color: rgba(201, 162, 39, 0.04);
+  transform: scale(1.05);
+  animation: numFade 0.6s var(--ease) both;
+}
+
+/* ============================================================
+   PANEL TAB — aba lateral (visível quando collapsed)
+   ============================================================ */
+.panel-tab {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: var(--panel-collapsed);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  z-index: 3;
+  transition: opacity 0.3s;
+}
+
+/* Esconde a aba quando o painel está ativo */
+.panel.active .panel-tab {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Bolinha numerada */
+.tab-step {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--dark-3);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition:
+    background 0.3s,
+    border-color 0.3s;
+}
+
+.panel:hover .tab-step {
+  border-color: var(--gold-border);
+  background: rgba(201, 162, 39, 0.08);
+}
+
+.tab-num {
+  font-family: var(--ff-display);
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  transition: color 0.3s;
+}
+
+.panel:hover .tab-num {
+  color: var(--gold);
+}
+
+/* Label rotacionada */
+.tab-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  transition: color 0.3s;
+}
+
+.panel:hover .tab-label {
+  color: var(--white);
+}
+
+/* ============================================================
+   PANEL BODY — conteúdo interno
+   ============================================================ */
+.panel-body {
+  position: relative;
+  z-index: 2;
+  padding: clamp(1.8rem, 4vw, 2.8rem) clamp(1.4rem, 3.5vw, 2.4rem);
+  padding-left: calc(var(--panel-collapsed) + clamp(1rem, 2vw, 1.6rem));
+  height: 100%;
+  overflow-y: auto;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s;
+
+  /* Scrollbar fina interna */
+  scrollbar-width: thin;
+  scrollbar-color: var(--gold-border) transparent;
+}
+
+.panel.active .panel-body {
+  opacity: 1;
+  pointer-events: auto;
+  transition-delay: 0.18s;
+}
+
+/* Título do painel */
+.panel-title {
+  font-family: var(--ff-display);
+  font-weight: 600;
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  line-height: 1.1;
+  letter-spacing: 0.005em;
+  margin-bottom: 0.4rem;
+  animation: fadeUp 0.5s var(--ease) 0.2s both;
+}
+
+.panel.active .panel-title {
+  animation: fadeUp 0.5s var(--ease) 0.22s both;
+}
+
+/* Subtítulo */
+.panel-sub {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 1.8rem;
+  animation: fadeUp 0.5s var(--ease) 0.28s both;
+}
+
+.panel.active .panel-sub {
+  animation: fadeUp 0.5s var(--ease) 0.3s both;
+}
+
+/* ============================================================
+   SECTION LABEL
+   ============================================================ */
+.section-label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+  animation: fadeUp 0.5s var(--ease) 0.34s both;
+}
+
+/* ============================================================
+   SVC GRID — lista de serviços
+   ============================================================ */
+.svc-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+  margin-bottom: 2rem;
+}
+
+/* Item de serviço */
+.svc-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.2rem;
+  background: linear-gradient(135deg, var(--dark) 0%, var(--dark-2) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition:
+    border-color 0.3s,
+    background 0.3s,
+    transform 0.3s var(--ease),
+    box-shadow 0.3s;
+
+  /* Entrada em cascata */
+  animation: svcIn 0.4s var(--ease) both;
+}
+
+.svc-item:nth-child(1) {
+  animation-delay: 0.36s;
+}
+.svc-item:nth-child(2) {
+  animation-delay: 0.42s;
+}
+.svc-item:nth-child(3) {
+  animation-delay: 0.48s;
+}
+.svc-item:nth-child(4) {
+  animation-delay: 0.54s;
+}
+.svc-item:nth-child(5) {
+  animation-delay: 0.6s;
+}
+.svc-item:nth-child(6) {
+  animation-delay: 0.66s;
+}
+
+/* Shimmer no hover */
+.svc-item::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -80%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.04) 50%,
+    transparent 100%
+  );
+  transition: left 0.45s var(--ease);
+  pointer-events: none;
+}
+
+.svc-item:hover::after {
+  left: 130%;
+}
+
+.svc-item:hover {
+  border-color: var(--gold-border);
+  background: linear-gradient(135deg, #1c1c1c 0%, var(--dark-2) 100%);
+  transform: translateX(4px);
+  box-shadow: 0 4px 20px -8px rgba(0, 0, 0, 0.5);
+}
+
+/* Item selecionado */
+.svc-item.selected {
+  border-color: var(--gold);
+  background: linear-gradient(135deg, #22190a 0%, #181206 100%);
+  box-shadow:
+    0 0 0 1px var(--gold),
+    0 8px 24px -8px rgba(201, 162, 39, 0.25);
+  transform: translateX(0);
+}
+
+.svc-item.selected:hover {
+  transform: translateX(2px);
+}
+
+/* Lado esquerdo */
+.svc-l {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  min-width: 0;
+}
+
+/* Ícone do serviço */
+.svc-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: var(--dark-3);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition:
+    background 0.3s,
+    border-color 0.3s;
+}
+
+.svc-icon svg {
+  width: 18px;
+  height: 18px;
+  color: var(--text-muted);
+  transition: color 0.3s;
+}
+
+.svc-item:hover .svc-icon,
+.svc-item.selected .svc-icon {
+  background: rgba(201, 162, 39, 0.1);
+  border-color: var(--gold-border);
+}
+
+.svc-item:hover .svc-icon svg,
+.svc-item.selected .svc-icon svg {
+  color: var(--gold);
+}
+
+/* Info do serviço */
+.svc-info h4 {
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 0.15rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.svc-info p {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Lado direito */
+.svc-r {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.svc-price {
+  font-family: var(--ff-display);
+  font-weight: 600;
+  font-size: 1.08rem;
+  color: var(--gold);
+  white-space: nowrap;
+}
+
+.svc-duration {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  letter-spacing: 0.03em;
+}
+
+/* Badge "Popular" */
+.badge {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold));
+  color: var(--black);
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 0.22rem 0.65rem;
+  border-radius: var(--radius-pill);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   CALENDÁRIO
+   ============================================================ */
+.cal-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  animation: fadeUp 0.45s var(--ease) 0.32s both;
+}
+
+.cal-month {
+  font-family: var(--ff-display);
+  font-weight: 600;
+  font-size: 1.15rem;
+  color: var(--white);
+  letter-spacing: 0.01em;
+  text-transform: capitalize;
+}
+
+.cal-nav {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.cal-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--dark-3);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  color: var(--text-muted);
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    color 0.2s,
+    transform 0.2s var(--ease);
+}
+
+.cal-btn:hover {
+  background: var(--gold-dim);
+  border-color: var(--gold-border);
+  color: var(--gold);
+  transform: scale(1.08);
+}
+
+.cal-btn:active {
+  transform: scale(0.94);
+}
+
+/* Grid do calendário — 7 colunas (dom→sab) */
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+  margin-bottom: 1.8rem;
+  animation: fadeUp 0.45s var(--ease) 0.38s both;
+}
+
+/* Célula do calendário — gerada via JS com classe .cal-day */
+.cal-day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid transparent;
+  color: var(--white);
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    color 0.2s,
+    transform 0.2s var(--ease);
+  user-select: none;
+}
+
+/* Cabeçalho dos dias da semana */
+.cal-day.cal-head {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  cursor: default;
+  text-transform: uppercase;
+  border: none;
+}
+
+/* Dias do mês anterior/próximo */
+.cal-day.other-month {
+  color: rgba(168, 168, 168, 0.25);
+  cursor: default;
+}
+
+/* Dias passados */
+.cal-day.past {
+  color: rgba(168, 168, 168, 0.2);
+  cursor: not-allowed;
+}
+
+/* Hoje */
+.cal-day.today {
+  border-color: var(--gold-border);
+  color: var(--gold-light);
+}
+
+/* Hover em dias disponíveis */
+.cal-day:not(.past):not(.other-month):not(.cal-head):hover {
+  background: var(--gold-dim);
+  border-color: var(--gold-border);
+  color: var(--gold-light);
+  transform: scale(1.1);
+}
+
+/* Dia selecionado */
+.cal-day.selected {
+  background: linear-gradient(135deg, var(--gold-light), var(--gold));
+  color: var(--black);
+  font-weight: 700;
+  border-color: transparent;
+  box-shadow: 0 4px 14px -4px var(--gold-glow);
+  transform: scale(1.1);
+}
+
+.cal-day.selected:hover {
+  transform: scale(1.12);
+}
+
+/* ============================================================
+   GRID DE HORÁRIOS — gerado via JS
+   ============================================================ */
+.time-section-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+.time-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  gap: 0.5rem;
+  margin-bottom: 1.4rem;
+  animation: fadeUp 0.45s var(--ease) 0.3s both;
+}
+
+/* Slot de horário */
+.time-slot {
+  padding: 0.55rem 0.4rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  background: var(--dark-3);
+  color: var(--white);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    color 0.2s,
+    transform 0.2s var(--ease);
+}
+
+.time-slot:hover {
+  background: var(--gold-dim);
+  border-color: var(--gold-border);
+  color: var(--gold-light);
+  transform: translateY(-2px);
+}
+
+/* Slot ocupado */
+.time-slot.busy {
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.04);
+  color: rgba(168, 168, 168, 0.2);
+  cursor: not-allowed;
+  text-decoration: line-through;
+  text-decoration-color: rgba(168, 168, 168, 0.2);
+}
+
+.time-slot.busy:hover {
+  transform: none;
+  background: transparent;
+  border-color: rgba(255, 255, 255, 0.04);
+  color: rgba(168, 168, 168, 0.2);
+}
+
+/* Slot selecionado */
+.time-slot.selected {
+  background: linear-gradient(135deg, var(--gold-light), var(--gold));
+  border-color: transparent;
+  color: var(--black);
+  font-weight: 700;
+  box-shadow: 0 4px 14px -4px var(--gold-glow);
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+   NOTICE — aviso informativo
+   ============================================================ */
+.notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  padding: 0.85rem 1rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-sm);
+  margin-bottom: 1.6rem;
+  animation: fadeUp 0.45s var(--ease) 0.4s both;
+}
+
+.notice svg {
+  width: 16px;
+  height: 16px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.notice p {
+  font-size: 0.79rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* ============================================================
+   PAINEL 4 — CONFIRMAÇÃO (gerado via JS)
+   Estiliza os elementos que o JS injeta em #p4body
+   ============================================================ */
+
+/* Sumário do agendamento */
+.confirm-summary {
+  background: linear-gradient(160deg, var(--dark) 0%, var(--dark-2) 100%);
+  border: 1px solid var(--gold-border);
+  border-radius: var(--radius);
+  padding: 1.6rem;
+  margin-bottom: 1.6rem;
+  animation: fadeUp 0.45s var(--ease) 0.22s both;
+}
+
+.confirm-summary h3 {
+  font-family: var(--ff-display);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--gold);
+  margin-bottom: 1.1rem;
+  letter-spacing: 0.02em;
+}
+
+.confirm-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  font-size: 0.87rem;
+}
+
+.confirm-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.confirm-row span:first-child {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.confirm-row span:last-child {
+  color: var(--white);
+  font-weight: 600;
+}
+
+.confirm-row.total span:last-child {
+  font-family: var(--ff-display);
+  font-size: 1.2rem;
+  color: var(--gold);
+}
+
+/* Campo de nome/telefone no painel 4 */
+.confirm-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  margin-bottom: 1.6rem;
+  animation: fadeUp 0.45s var(--ease) 0.3s both;
+}
+
+.confirm-field label {
+  display: block;
+  font-size: 0.73rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  margin-bottom: 0.38rem;
+}
+
+.confirm-field input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  background: var(--dark-3);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: var(--radius-sm);
+  color: var(--white);
+  font-family: var(--ff-body);
+  font-size: 0.91rem;
+  outline: none;
+  transition:
+    border-color 0.25s,
+    box-shadow 0.25s;
+}
+
+.confirm-field input::placeholder {
+  color: rgba(168, 168, 168, 0.38);
+}
+
+.confirm-field input:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.12);
+}
+
+/* Mensagem de sucesso pós-confirmação */
+.success-msg {
+  text-align: center;
+  padding: 2.5rem 1rem;
+  animation: fadeUp 0.5s var(--ease) both;
+}
+
+.success-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba(201, 162, 39, 0.12);
+  border: 2px solid var(--gold-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.4rem;
+}
+
+.success-icon svg {
+  width: 28px;
+  height: 28px;
+  color: var(--gold);
+}
+
+.success-msg h3 {
+  font-family: var(--ff-display);
+  font-weight: 600;
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.success-msg p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  max-width: 280px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ============================================================
+   BOTÕES
+   ============================================================ */
+
+/* Container de botões */
+.btn-row {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 0.4rem;
+  flex-wrap: wrap;
+  animation: fadeUp 0.45s var(--ease) 0.48s both;
+}
+
+/* Base */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--ff-body);
+  font-weight: 600;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+  padding: 0.82rem 1.6rem;
+  border-radius: var(--radius-pill);
+  border: none;
+  cursor: pointer;
+  transition:
+    transform 0.3s var(--ease),
+    box-shadow 0.3s var(--ease),
+    background 0.3s,
+    color 0.3s,
+    opacity 0.3s;
+  white-space: nowrap;
+}
+
+.btn:active {
+  transform: scale(0.96) !important;
+}
+
+.btn svg {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.25s var(--ease);
+  flex-shrink: 0;
+}
+
+/* Gold — primário */
+.btn-gold {
+  background: linear-gradient(135deg, var(--gold-light), var(--gold));
+  color: var(--black);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Shimmer no hover */
+.btn-gold::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -80%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.22) 50%,
+    transparent 100%
+  );
+  transition: left 0.45s var(--ease);
+  pointer-events: none;
+}
+
+.btn-gold:hover {
+  box-shadow: 0 10px 30px -8px var(--gold-glow);
+  transform: translateY(-2px);
+}
+
+.btn-gold:hover::before {
+  left: 130%;
+}
+
+.btn-gold:hover svg {
+  transform: translateX(3px);
+}
+
+.btn-gold:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.btn-gold:disabled::before {
+  display: none;
+}
+
+/* Quando o botão gold está disponível e pronto: pulso suave */
+.btn-gold:not(:disabled) {
+  animation: goldPulse 2.8s infinite;
+}
+
+/* Ghost — secundário / voltar */
+.btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.7rem 1.2rem;
+}
+
+.btn-ghost:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: var(--white);
+  transform: translateX(-2px);
+}
+
+.btn-ghost svg {
+  transition: transform 0.25s var(--ease);
+}
+
+.btn-ghost:hover svg {
+  transform: translateX(-3px);
+}
+
+/* Small */
+.btn-sm {
+  font-size: 0.82rem;
+  padding: 0.6rem 1.1rem;
+}
+
+/* WhatsApp — gerado no painel 4 */
+.btn-whatsapp {
+  background: #25d366;
+  color: var(--white);
+  box-shadow: 0 8px 24px -8px rgba(37, 211, 102, 0.5);
+}
+
+.btn-whatsapp:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px -8px rgba(37, 211, 102, 0.65);
+}
+
+/* ============================================================
+   RESPONSIVIDADE
+   ============================================================ */
+
+/* Tablet */
+@media (max-width: 1024px) {
+  :root {
+    --panel-collapsed: 60px;
+  }
+
+  .svc-info p {
+    display: none;
+  }
+
+  .panel-title {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+  }
+}
+
+/* Mobile: accordion vertical */
+@media (max-width: 768px) {
+  :root {
+    --panel-collapsed: 56px;
+  }
+
+  .arena {
+    flex-direction: column;
+  }
+
+  .panel {
+    /* No mobile, painel collapsed fica como uma faixa horizontal */
+    flex: 0 0 var(--panel-collapsed);
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+
+  .panel.active {
+    flex: 1 1 auto;
+    min-height: 80vh;
+    border-bottom-color: var(--gold-border);
+  }
+
+  /* Tab horizontal no mobile */
+  .panel-tab {
+    width: 100%;
+    height: var(--panel-collapsed);
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: 0 1.2rem;
+    gap: 0.75rem;
+  }
+
+  .tab-label {
+    writing-mode: horizontal-tb;
+    transform: none;
+    font-size: 0.75rem;
+  }
+
+  .panel-body {
+    padding: 1.4rem 1.2rem 2rem;
+  }
+
+  /* Número decorativo menor */
+  .panel-bg-num {
+    font-size: 5rem;
+    bottom: auto;
+    right: 1rem;
+    top: 0;
+    line-height: 1.4;
+  }
+
+  .time-grid {
+    grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+  }
+
+  .btn-row {
+    flex-direction: column-reverse;
+  }
+
+  .btn-row .btn {
+    width: 100%;
+  }
+}
+
+/* Mobile pequeno */
+@media (max-width: 480px) {
+  .svc-item {
+    padding: 0.85rem 0.9rem;
+    gap: 0.7rem;
+  }
+
+  .svc-icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .svc-icon svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .hd {
+    padding: 0 1rem;
+  }
+
+  .hd-back span {
+    display: none;
+  }
+}

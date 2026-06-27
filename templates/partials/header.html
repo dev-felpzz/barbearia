@@ -1,0 +1,78 @@
+{# ============================================================
+HEADER GLOBAL — Elite Barber
+Reaproveitável em qualquer página: basta incluir
+{% include "partials/header.html" %}
+logo no início do
+
+<body>.
+
+    Depende de:
+    - current_user (injetado automaticamente em TODOS os templates
+    pelo context_processor em app.py — não precisa passar nada)
+    - static/css/header.css (carregar DEPOIS do style.css)
+    - static/js/header.js (carregar antes do </body>)
+============================================================ #}
+{% set home_url = url_for('home') %}
+{% set ancora = '' if request.path == '/' else home_url %}
+
+<header class="header" id="header">
+    <nav class="nav container">
+        <a href="{{ home_url }}" class="logo">ELITE<span>BARBER</span></a>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="{{ ancora }}#home">Início</a></li>
+            <li><a href="{{ ancora }}#sobre">Sobre nós</a></li>
+            <li><a href="{{ ancora }}#servicos">Serviços</a></li>
+            <li><a href="{{ ancora }}#galeria">Galeria</a></li>
+            <li><a href="{{ ancora }}#localizacao">Localização</a></li>
+            <li><a href="{{ ancora }}#contato">Contato</a></li>
+        </ul>
+
+        <div class="hd-actions">
+            <a href="{{ ancora }}#agendamento" class="btn btn-gold btn-sm nav-cta">Agendar Horário</a>
+
+            {% if current_user %}
+            <div class="user-area" id="userArea">
+                <button class="user-trigger" id="userTrigger" type="button" aria-haspopup="true" aria-expanded="false">
+                    {% if current_user.foto_url %}
+                    <img src="{{ current_user.foto_url }}" alt="" class="avatar avatar-img">
+                    {% else %}
+                    <span class="avatar avatar-fallback">{{ current_user.iniciais }}</span>
+                    {% endif %}
+                    <span class="user-name">{{ current_user.nome }}</span>
+                    <svg class="user-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6" />
+                    </svg>
+                </button>
+
+                <div class="dropdown-menu" id="dropdownMenu" role="menu">
+                    <a href="{{ url_for('perfil_page') }}" class="dropdown-item" role="menuitem">Meu Perfil</a>
+
+                    {% if current_user.tipo == 'barbeiro' %}
+                    <a href="{{ url_for('agendamentos_dia_page') }}" class="dropdown-item" role="menuitem">Agendamentos
+                        do Dia</a>
+                    <a href="{{ url_for('clientes_page') }}" class="dropdown-item" role="menuitem">Clientes</a>
+                    <a href="{{ url_for('servicos_page') }}" class="dropdown-item" role="menuitem">Serviços</a>
+                    <a href="{{ url_for('financeiro_page') }}" class="dropdown-item" role="menuitem">Financeiro</a>
+                    {% else %}
+                    <a href="{{ url_for('meus_agendamentos_page') }}" class="dropdown-item" role="menuitem">Meus
+                        Agendamentos</a>
+                    {% endif %}
+
+                    <a href="{{ url_for('configuracoes_page') }}" class="dropdown-item"
+                        role="menuitem">Configurações</a>
+                    <div class="dropdown-divider"></div>
+                    <button class="dropdown-item dropdown-item-danger" id="logoutBtn" type="button"
+                        role="menuitem">Sair</button>
+                </div>
+            </div>
+            {% else %}
+            <a href="{{ url_for('login_page') }}" class="hd-login-link">Entrar</a>
+            {% endif %}
+
+            <button class="burger" id="burger" aria-label="Abrir menu" aria-expanded="false">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+</header>
